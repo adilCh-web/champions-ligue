@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>virtual ligue</title>
+    <link rel = "stylesheet" href = "./styles.css">
+    <link rel="stylesheet" href=
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+    
+</head>
+<body>
+    <div id = "container">
+    <nav>
+        <ul>
+            <li href = "#"><img src = "./img/logo.png" alt = "logo" height ="30rem"></li>
+            
+            <li><button id = "button16" >Round of 16</button></li>
+            <li><button id = "button8" >Quarter-finals</button></li>
+            <li><button id = "button4" >Semi-finals</button></li>
+            <li><button id = "buttonF">Finals</button></li>
+
+        </ul>
+    </nav>
+    <section id="firstPhase">
+        <u><h3 id = "groupLabel">Group 1</h3></u>
+        <div>
+            <button id = "previous"><i class="fas fa-arrow-alt-circle-left"></i></button>
+            <button id = "next"><i class="fas fa-arrow-alt-circle-right"></i></button>
+        </div>
+        <div id = "groupsDiv">
+            
+            <p id = "info"></p>
+        </div>
+    
+
+        <button id = "displayResult">display Results</button>
+
+        
+        <div id="result">
+
+        </div>
+        
+
+        <table>
+            <tr>
+                <th>Teams</th>
+                <th>Points</th>
+                <th>Goals</th>
+            </tr>
+            
+            <tr>
+                <td id = "team1"></td>
+                <td id = "team1P"></td>
+                <td id= team1G></td>
+            </tr>
+            <tr>
+                <td id = "team2"></td>
+                <td id = "team2P"></td>
+                <td id= team2G></td>
+            </tr>
+            <tr>
+                <td id = "team3"></td>
+                <td id = "team3P"></td>
+                <td id= team3G></td>
+            </tr>
+            <tr>
+                <td id = "team4"></td>
+                <td id = "team4P"></td>
+                <td id= team4G></td>
+            </tr>
+            
+
+        
+
+            </tbody>
+        </table>
+    </section>
+
+    <div id = "round16">
+        <div id = "nextRoundsTeam1Div">
+
+        </div>
+        <div id = "nextRoundsResultDiv" style = "text-align: center">
+            
+        </div>
+        <div id = "nextRoundsTeam2Div">
+            
+        </div>
+    </div>
+
+
+</div>
+
+
+    
+    
+<script src="./js.js"  type="module"></script>  
+</body>
+</html>
