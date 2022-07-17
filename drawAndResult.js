@@ -1,5 +1,8 @@
 import {scooring} from "./scooring.js"
 
+
+
+
 function drawAndResult(teams,numberOfTeams,btn)
 {
     let qualifiedTeam = []
@@ -21,7 +24,12 @@ function drawAndResult(teams,numberOfTeams,btn)
             document.getElementById("nextRoundsTeam2Div").innerHTML = document.getElementById("nextRoundsTeam2Div").innerHTML + "<br>" + teams[decrease] 
             console.log(teams[decrease])
  
-            let result = scooring(teams[i],teams[decrease])
+
+            let id = Math.random()
+            let button = document.createElement("button")
+            button.id = id
+            let result = resultThroughTime(scooring(teams[i],teams[decrease])[0],scooring(teams[i],teams[decrease])[1],button,id)
+            
 
             if(result[0] > result[1])
             {

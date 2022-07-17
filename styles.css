@@ -88,7 +88,7 @@ h2
     text-align: center;
 }
 
-#result, #round16
+#round16
 {
     display:flex;
     align-items: center;
@@ -99,24 +99,14 @@ h2
 
 
 }
-#result div, #round16 div
+#round16 div
 {
     margin:0px 10px 0px 10px;
     
 
 }
 
-#displayResult
-{
-    background:black;
-    color:orangered;
-    padding:4px;
-    display:none;
-    margin:30px auto 30px  auto;
-    border-radius: 40px;
 
-    
-}
 
 #groups
 {
@@ -128,7 +118,7 @@ h2
     border:2px solid black
 }
 
-table
+#rank
 {
     display:none;
     text-align:left;
@@ -137,7 +127,33 @@ table
     
 }
 
-table,td,th {
+#firstRound
+{
+    display:block;
+    width:300px;
+    margin:40px auto 20px auto;
+    border:none;
+}
+
+#firstRound td
+{
+    text-align: center;
+    padding:5px;
+    border: transparent;
+    min-width:100px;
+}
+#firstRound tr
+{
+ 
+    height:50px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+#rank,td,th {
     font-size:14px;
     padding:2px;
     border-collapse: collapse;  
@@ -169,3 +185,46 @@ nav button:hover
     background-color:rgb(126, 71, 51)
 }
 
+.buttonsClass
+{
+    background-color: transparent;
+    color:white;
+    margin:auto auto;
+    height:15px;
+}
+
+
+.timer
+{
+    border-radius: 90px;
+    background-color: black;
+    font-size:10px;
+    color:white
+}
+
+.span
+{
+    width:10px;
+    border-radius: 90px;
+    background-color: black;
+    color:white;
+    font-size:8px;
+    font-weight: lighter;
+    margin-left:5px;
+
+
+}
+td .span label
+{
+    margin:auto auto;
+    display:block;
+}
+.row
+{
+    height:30px;
+    border-bottom: 1px solid white;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

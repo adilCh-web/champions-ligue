@@ -1,40 +1,138 @@
-
 import { scooring } from "./scooring.js"
 import {groups} from "./formingGroups.js"
-import {drawAndResult} from "./drawAndResult.js"
+//import {drawAndResult} from "./drawAndResult.js"
 import {scrores} from "./scoresFirstPhase.js"
 
 let teams16 = []
 var teams8 = []
 let teams4 = []
 let FinalTeams = []
+let groupNr = 1
+var timeouts=[] //to store all the timeoiut we are creating from a for loops so we can clear them 
+
+let resultAlreadyClicked = []
+
+function printDatainTable()
+{
 
 
-document.getElementById("displayResult").addEventListener("click",displayResult)
+
+    document.getElementById("t1").innerHTML = groups[groupNr-1][0] 
+    document.getElementById("t3").innerHTML = groups[groupNr-1][2] 
+    document.getElementById("t5").innerHTML = groups[groupNr-1][0]
+    document.getElementById("t7").innerHTML = groups[groupNr-1][1] 
+    document.getElementById("t9").innerHTML = groups[groupNr-1][0] 
+    document.getElementById("t11").innerHTML = groups[groupNr-1][1] 
+
+    document.getElementById("t2").innerHTML = groups[groupNr-1][1] 
+    document.getElementById("t4").innerHTML = groups[groupNr-1][3] 
+    document.getElementById("t6").innerHTML = groups[groupNr-1][3] 
+    document.getElementById("t8").innerHTML = groups[groupNr-1][2] 
+    document.getElementById("t10").innerHTML = groups[groupNr-1][2]
+    document.getElementById("t12").innerHTML = groups[groupNr-1][3] 
+
+    for(let i=1;i<7;i++)
+    {
+
+        let id="r"+ i
+        let idTimer = "timer"+i
+        let btn =document.getElementById(id)
+        let lbl =document.getElementById(idTimer)
+        if(resultAlreadyClicked.includes(groupNr+id) == false)
+        {
+            btn.innerHTML="Result";
+            lbl.innerHTML = "0 Mins"
+
+        }
+        else
+        {btn.innerHTML = scrores[groupNr-1][i-1].toString().replace(",", " - ")
+        lbl.innerHTML = "90 Mins";
+        
+        }
+
+        console.log(scrores[groupNr-1][i-1].toString().replace(",", " - "))
+        
+        btn.addEventListener("click",
+        function(){
+            resultThroughTime(scrores[groupNr-1][i-1][0],scrores[groupNr-1][i-1][1],btn,idTimer)
+
+        /*scrores[groupNr-1][i-1].toString().replace(",", " - ");*/
+        resultAlreadyClicked.push(groupNr+id) })
+    }
+}
+
+printDatainTable()
+
+function resultThroughTime(nr1,nr2,buttonClicked,id)
+{
+
+    for(let i=0;i<timeouts.length;i++)
+    {
+        clearTimeout(timeouts[i])
+    }
+
+    let goal1=0;let goal2 =0;
+    buttonClicked.innerHTML = goal1 + "-" + goal2 ;
+
+     
+    for(let g=0;g<nr1;g++)
+        {
+            timeouts.push(setTimeout(()=>{goal1+=1;
+            buttonClicked.innerHTML = goal1 + "-" + goal2 ;console.log(goal1)},Math.floor(Math.random()*45000)))
+        }
+
+    for(let g=0;g<nr2;g++)
+        {
+            timeouts.push(setTimeout(()=>{goal2+=1
+                buttonClicked.innerHTML = goal1 + "-" + goal2},Math.floor(Math.random()*45000)))
+        }
+    var timer=0
+    var thisInterval = 
+    setInterval(()=>{
+        timer+=1
+        document.getElementById(id).innerHTML = timer + " mins"
+        if(timer==90)
+          {clearInterval(thisInterval);
+        }},500)
+
+
+
+}
+
+
+
 document.getElementById("button16").addEventListener("click",display16Teams)
 document.getElementById("button8").addEventListener("click",quarterFinal)
 document.getElementById("button4").addEventListener("click",semiFinal)
 document.getElementById("buttonF").addEventListener("click",final)
 
 
-let groupNr = 1
+
 displayGroups()
+
+
 function nextGroupShowing()
 {
     if(groupNr!==8)
     {
         groupNr+=1
     }
+    printDatainTable()
     displayGroups()
+    getGoalsAndQualification()
     document.getElementById("groupLabel").innerHTML = "Group " + groupNr
 }
+
+
 function previousGroupShowing()
 {
     if(groupNr!==1)
     {
         groupNr-=1
     }
+    printDatainTable()
     displayGroups()
+    getGoalsAndQualification()
     document.getElementById("groupLabel").innerHTML = "Group " + groupNr
 
 }
@@ -44,9 +142,6 @@ function previousGroupShowing()
 function displayGroups()
 {
 
-    document.getElementById("displayResult").style.display = "block"
-
-    document.getElementsByTagName("table")[0].style.display = "none"
 
 
     document.getElementById("info").innerHTML =  groups[groupNr-1][0]+  "<br>" + 
@@ -55,7 +150,7 @@ function displayGroups()
 
 
 
-        displayGames()
+        getGoalsAndQualification()
 }
 let next =document.getElementById("next")
 let previous =document.getElementById("previous")
@@ -70,68 +165,16 @@ next.addEventListener("click",nextGroupShowing)
 
 //display Games Phase A
 
-function displayGames()
+function getGoalsAndQualification()
 {
 
-    // lets remove the previous displayed result on the divs if they were displayed
-    if (document.contains(document.getElementById("div1")))
-    {
-        document.getElementById("div1").remove()
-    }
-    if (document.contains(document.getElementById("div2")))
-    {
-        document.getElementById("div2").remove()
-    }
-    if (document.contains(document.getElementById("div3")))
-    {
-        document.getElementById("div3").remove()
-    }
- 
-
-    let divTeam1 = document.createElement("div")
-    divTeam1.setAttribute("id","div1")
-    let divResult = document.createElement("div")
-    divResult.setAttribute("id","div2")
-    let divTeam2 = document.createElement("div")
-    divTeam2.setAttribute("id","div3")
-
+    document.getElementById("rank").style.display = "none"
     //console.log("ckicked")
     //console.log(object.value)
         let p1=0, p2=0, p3 =0, p4 = 0 
         let g1 =0, g2=0 ,g3=0, g4=0
 
         //console.log("group"+ Number(i+1))
-
-            divTeam1.innerHTML = 
-            groups[groupNr-1][0] + "<br>" +
-            groups[groupNr-1][2] + "<br>" + "<br>" +
-            groups[groupNr-1][0] + "<br>" +
-            groups[groupNr-1][1] + "<br>" + "<br>" +
-            groups[groupNr-1][0] + "<br>" + 
-            groups[groupNr-1][1] 
-            document.getElementById("result").appendChild(divTeam1)
-
-            // div result games
-
-            divResult.innerHTML = 
-            scrores[groupNr-1][0].toString().replace(",", " - ") + "<br>" +
-            scrores[groupNr-1][1].toString().replace(",", " - ") + "<br>" + "<br>" +
-            scrores[groupNr-1][2].toString().replace(",", " - ") + "<br>" +
-            scrores[groupNr-1][3].toString().replace(",", " - ") + "<br>" + "<br>" +
-            scrores[groupNr-1][4].toString().replace(",", " - ") + "<br>" +
-            scrores[groupNr-1][5].toString().replace(",", " - ")
-
-            document.getElementById("result").appendChild(divResult)
-            //div teams 2
-            divTeam2.innerHTML = 
-            groups[groupNr-1][1] + "<br>" +
-            groups[groupNr-1][3] + "<br>" + "<br>" +
-            groups[groupNr-1][3] + "<br>" +
-            groups[groupNr-1][2] + "<br>" + "<br>" +
-            groups[groupNr-1][2] + "<br>" +
-            groups[groupNr-1][3] 
-            document.getElementById("result").appendChild(divTeam2)
-            divResult.style.display = "none"
             
 
             //points Game1
@@ -256,17 +299,13 @@ function displayGames()
 
 
         //console.log(teams16)
+        //setTimeout(()=>{document.getElementById("rank").style.display = "block"},3000)
+        
     }
     
 
 
 
-function displayResult()   // Phase A
-{
-    document.getElementById("div2").style.display = "block"
-
-    setTimeout(()=>{document.getElementsByTagName("table")[0].style.display = "block"},5000)
-}
 
 
 
@@ -276,14 +315,13 @@ function display16Teams()
     if(teams16.length == 16)
     {
         teams8 = drawAndResult(teams16,16,document.getElementById("button16"))
-        deleteFirstPhase()
     }
 }
 
-function deleteFirstPhase() /*..............................................*/
+/*function deleteFirstPhase()
 {
     document.getElementById("firstPhase").style.display="none"
-}
+}  */
 
 function quarterFinal()
 {
@@ -317,3 +355,87 @@ function final()
 
 
 
+    function drawAndResult(teams,numberOfTeams,btn)
+    {
+        let qualifiedTeam = []
+        if(teams.length == numberOfTeams)
+        {
+            btn.setAttribute('disabled', 'disabled')
+            let decrease = Number(numberOfTeams-1)
+            document.getElementById("nextRoundsTeam1Div").innerHTML=  "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
+    
+            document.getElementById("nextRoundsResultDiv").innerHTML= "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
+            document.getElementById("nextRoundsTeam2Div").innerHTML= "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
+    
+    
+            for(let i =0;i<numberOfTeams/2;i++)
+            {   let lblTeam1 = document.createElement("label")
+                lblTeam1.className="row"
+                document.getElementById("nextRoundsTeam1Div").appendChild(lblTeam1)  
+                lblTeam1.innerHTML = teams[i]
+
+                let lblTeam2 = document.createElement("label")
+                lblTeam2.className="row"
+                document.getElementById("nextRoundsTeam2Div").appendChild(lblTeam2)  
+                lblTeam2.innerHTML = teams[decrease]
+
+     
+    
+                let id = Math.random()
+                let id_ = Math.random()
+                let div = document.createElement("div")
+                div.className="row"
+                let button = document.createElement("button")
+                let lbl = document.createElement("label")
+                button.id = id
+                lbl.id=id_
+                button.innerHTML= "Result"
+                button.className = "buttonsClass"
+                lbl.className = "span"
+                lbl.innerHTML = "00 Mins"
+                div.appendChild(button)
+                div.appendChild(lbl)
+                document.getElementById("nextRoundsResultDiv").appendChild(div)
+                button.addEventListener("click",()=>
+                    { resultThroughTime(scooring(teams[i],teams[decrease])[0],scooring(teams[i],teams[decrease])[1],button,id_)})
+                let result = scooring(teams[i],teams[decrease])
+
+                
+    
+                if(result[0] > result[1])
+                {
+                    qualifiedTeam.push(teams[i])
+    
+                }
+                else if(result[0] < result[1])
+                {
+                    qualifiedTeam.push(teams[decrease])
+                }
+                else
+                {
+                    let index = Math.floor(Math.random()*2)
+                    qualifiedTeam.push([teams[i],teams[decrease]][index])
+                    let penalties = [[4,1],[3,0],[5,4],[4,2],[3,1],[6,5]][Math.floor(Math.random()*6)]
+    
+                    if(index===0)
+                    {
+    
+                        result = `(${penalties[0]}) `+ result + ` (${penalties[1]})`
+                    }
+                    else
+                    {
+                        result = `(${penalties[1]}) ` + result + ` (${penalties[0]})`
+                    }
+                }
+
+    
+                decrease-=1
+    
+    
+            }
+            console.log(qualifiedTeam)
+            return qualifiedTeam
+            
+        }
+    
+    }
