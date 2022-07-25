@@ -1,12 +1,29 @@
 import { scooring } from "./scooring.js"
-import {groups} from "./formingGroups.js"
+import {groups,totalTeams} from "./formingGroups.js"
 //import {drawAndResult} from "./drawAndResult.js"
 import {scrores} from "./scoresFirstPhase.js"
 
+let db = new Localbase("db")
+
+console.log(totalTeams.length)
+document.getElementById("delete").addEventListener("click",()=>
+{
+    db.collection('winners').delete()
+    for(let i=0;i<totalTeams.length;i++)
+    {
+        db.collection("winners").add({team:totalTeams[i],point:0})
+    }
+})
+var winner
 let teams16 = []
+var scooring16 = []
 var teams8 = []
+var scooring8 = []
 let teams4 = []
+var scooring4 = []
 let FinalTeams = []
+var scooringFinal = []
+
 let groupNr = 1
 var timeouts=[] //to store all the timeoiut we are creating from a for loops so we can clear them 
 
@@ -47,6 +64,7 @@ function printDatainTable()
         else
         {btn.innerHTML = scrores[groupNr-1][i-1].toString().replace(",", " - ")
         lbl.innerHTML = "90 Mins";
+        btn.setAttribute('disabled', 'disabled')
         
         }
 
@@ -63,13 +81,8 @@ function printDatainTable()
 
 printDatainTable()
 
-function resultThroughTime(nr1,nr2,buttonClicked,id)
+function resultThroughTime(nr1,nr2,buttonClicked,id,penalties)
 {
-
-    for(let i=0;i<timeouts.length;i++)
-    {
-        clearTimeout(timeouts[i])
-    }
 
     let goal1=0;let goal2 =0;
     buttonClicked.innerHTML = goal1 + "-" + goal2 ;
@@ -79,6 +92,7 @@ function resultThroughTime(nr1,nr2,buttonClicked,id)
         {
             timeouts.push(setTimeout(()=>{goal1+=1;
             buttonClicked.innerHTML = goal1 + "-" + goal2 ;console.log(goal1)},Math.floor(Math.random()*45000)))
+            
         }
 
     for(let g=0;g<nr2;g++)
@@ -95,7 +109,7 @@ function resultThroughTime(nr1,nr2,buttonClicked,id)
           {clearInterval(thisInterval);
         }},500)
 
-
+        
 
 }
 
@@ -121,6 +135,11 @@ function nextGroupShowing()
     displayGroups()
     getGoalsAndQualification()
     document.getElementById("groupLabel").innerHTML = "Group " + groupNr
+
+    for(let i=0;i<timeouts.length;i++)
+    {
+        clearTimeout(timeouts[i])
+    }
 }
 
 
@@ -134,6 +153,10 @@ function previousGroupShowing()
     displayGroups()
     getGoalsAndQualification()
     document.getElementById("groupLabel").innerHTML = "Group " + groupNr
+    for(let i=0;i<timeouts.length;i++)
+    {
+        clearTimeout(timeouts[i])
+    }
 
 }
 
@@ -314,7 +337,16 @@ function display16Teams()
 {
     if(teams16.length == 16)
     {
-        teams8 = drawAndResult(teams16,16,document.getElementById("button16"))
+        let decrease = teams16.length
+        for(let i=0;i<teams16.length;i++)
+        {
+            scooring16.push(scooring(teams16[i],teams16[decrease]))
+            decrease -=1
+        }
+        console.log("hallooooooooo" + scooring16)
+        teams8 = drawAndResult(teams16,16, scooring16,document.getElementById("button16"))
+        
+
     }
 }
 
@@ -328,7 +360,14 @@ function quarterFinal()
     console.log(teams8.length)
     if (teams8.length == 8)
     {
-        teams4 = drawAndResult(teams8,8,document.getElementById("button8"))
+        let decrease = teams8.length
+        for(let i=0;i<teams8.length;i++)
+        {
+            scooring8.push(scooring(teams8[i],teams8[decrease]))
+            decrease -=1
+        }
+        teams4 = drawAndResult(teams8,8, scooring8, document.getElementById("button8")) 
+
     }  
 }
 
@@ -336,10 +375,18 @@ function quarterFinal()
 function semiFinal()
 {
     console.log("hallooooo")
+
     if (teams4.length == 4)
     {
-        FinalTeams = drawAndResult(teams4,4,document.getElementById("button4"))
+        let decrease = teams4.length
+        for(let i=0;i<teams4.length;i++)
+        {
+            scooring4.push(scooring(teams4[i],teams4[decrease]))
+            decrease -=1
+        }
+        FinalTeams = drawAndResult(teams4,4, scooring4, document.getElementById("button4"))
     }
+
 }
 
 function final()
@@ -348,24 +395,48 @@ function final()
 
         if (FinalTeams.length == 2)
         {
-            let winner = drawAndResult(FinalTeams,2,document.getElementById("buttonF"))
-            console.log(winner)
+            let decrease = FinalTeams.length
+            for(let i=0;i<FinalTeams.length;i++)
+            {
+                scooringFinal.push(scooring(teams8[i],teams8[decrease]))
+            }
+            winner = drawAndResult(FinalTeams,2, scooringFinal, document.getElementById("buttonF"))
+            //console.log(winner)
+
+            
+            db.collection("winners").get().then(winners=>
+                {
+                    for(let i=0;i<winners.length;i++)
+                        {
+                            //console.log(winners[i].team)
+                            if(winners[i].team == winner)
+                            {
+                                //console.log("---updated---")
+                                db.collection('winners').doc({ team: winners[i].team }).update
+                                    ({
+                                        point: winners[i].point + 1
+                                    })
+                            }
+                        }
+                }
+                )
+            
         }
     }
 
 
 
-    function drawAndResult(teams,numberOfTeams,btn)
+    function drawAndResult(teams,numberOfTeams,scooringArray,btn)
     {
         let qualifiedTeam = []
         if(teams.length == numberOfTeams)
         {
             btn.setAttribute('disabled', 'disabled')
             let decrease = Number(numberOfTeams-1)
-            document.getElementById("nextRoundsTeam1Div").innerHTML=  "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
+            document.getElementById("nextRoundsTeam1Div").innerHTML +=  "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
     
-            document.getElementById("nextRoundsResultDiv").innerHTML= "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
-            document.getElementById("nextRoundsTeam2Div").innerHTML= "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
+            document.getElementById("nextRoundsResultDiv").innerHTML += "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
+            document.getElementById("nextRoundsTeam2Div").innerHTML += "<br>" + "<hr>" + "<hr>" + "<hr>"  +"<hr>" +"<br>"
     
     
             for(let i =0;i<numberOfTeams/2;i++)
@@ -397,8 +468,9 @@ function final()
                 div.appendChild(lbl)
                 document.getElementById("nextRoundsResultDiv").appendChild(div)
                 button.addEventListener("click",()=>
-                    { resultThroughTime(scooring(teams[i],teams[decrease])[0],scooring(teams[i],teams[decrease])[1],button,id_)})
-                let result = scooring(teams[i],teams[decrease])
+                    { resultThroughTime(scooringArray[i][0],scooringArray[i][1],button,id_)})
+                let result = scooringArray[i]
+                console.log(result)
 
                 
     
@@ -421,10 +493,12 @@ function final()
                     {
     
                         result = `(${penalties[0]}) `+ result + ` (${penalties[1]})`
+                       
                     }
                     else
                     {
                         result = `(${penalties[1]}) ` + result + ` (${penalties[0]})`
+                        
                     }
                 }
 
@@ -439,3 +513,34 @@ function final()
         }
     
     }
+
+const ctx = document.getElementById("chart").getContext('2d');
+let labels = []
+let data = []
+db.collection("winners").get().then(winners=>
+    {
+        for(let i=0;i<winners.length;i++)
+            {
+                labels.push(winners[i].team)
+                data.push(winners[i].point)
+
+            }
+    })
+    
+
+new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Number of Titles',
+                    data: data,
+                    borderWidth: 1,
+                    fill: true,
+                    backgroundColor: "orange",
+                    borderColor: "transparent",
+                },
+            ],
+        },
+    });

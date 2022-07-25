@@ -5,8 +5,8 @@ const team3 = ["Fc Valencia","Borussia Dortmund","Inter Milan","Fc Arsenal","Aja
 const team4 = ["Fc Porto","Tottenham","Fc Sevilla","Red Bull Salzburg","SSC Napoli","Bayer Leverkusen"]
 const team5 = ["Fc Lyon","As Roma","Villarreal","Benifica","PSV Eindhoven"]
 const team6 = ["Slavia Prague","Shakhtar Donetsk","Olympiakos","Zenit St. Petersburg","Dinamo Zagreb"]
-let teams 
-teams = team2.concat(team3,team4,team5,team6)
+let teams = team2.concat(team3,team4,team5,team6)
+let totalTeams = team1.concat(team2,team3,team4,team5,team6)
 
 
 //lets separate the stronger teams --team1
@@ -43,5 +43,5 @@ for(let i=0;i<groups.length;i++)
     }
 }
 
-export {groups,team1,team2,team3,team4,team5,team6}
+export {groups,totalTeams,team1,team2,team3,team4,team5,team6}
 

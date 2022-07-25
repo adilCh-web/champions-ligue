@@ -8,18 +8,22 @@
     <link rel = "stylesheet" href = "./styles.css">
     <link rel="stylesheet" href=
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+    <script src="https://unpkg.com/localbase/dist/localbase.dev.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js'></script>
+    
     
 </head>
 <body>
     <div id = "container">
     <nav>
         <ul>
-            <li href = "#"><img src = "./img/logo.png" alt = "logo" height ="30rem"></li>
+            <li><img href = "index.html" src = "./img/logo.png" alt = "logo" height ="30rem"></li>
             
-            <li><button id = "button16" >Round of 16</button></li>
-            <li><button id = "button8" >Quarter-finals</button></li>
-            <li><button id = "button4" >Semi-finals</button></li>
-            <li><button id = "buttonF">Finals</button></li>
+            <li><button id = "button16" >2nd Round</button></li>
+            <li><button id = "button8" >Quarter</button></li>
+            <li><button id = "button4" >Semi</button></li>
+            <li><button id = "buttonF">Final</button></li>
+            <li><button id = "delete">Delete Data</button></li>
 
         </ul>
     </nav>
@@ -74,7 +78,6 @@
                 </td>
                     </td>
                 <td id= t8></td>
-    #
             </tr>
             <tr>
                 <td id = "t9"></td>
@@ -141,6 +144,10 @@
             
         </div>
     </div>
+
+    <canvas id="chart">
+
+    </canvas>
 
 
 </div>
